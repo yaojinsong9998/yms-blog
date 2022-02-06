@@ -66,7 +66,7 @@ public class ArticleServiceImpl implements ArticleService {
         LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.orderByDesc(Article::getCreateDate);
         queryWrapper.select(Article::getId,Article::getTitle);
-        queryWrapper.last("limit" + limit);
+        queryWrapper.last("limit " + limit);
         //select id,title from article order by create_date desc limit 5
         List<Article> articles = articleMapper.selectList(queryWrapper);
         return Result.success(copyList(articles,false,false));
