@@ -22,4 +22,16 @@
             #{tagId}
         </foreach>
     </select>
+
+    <select id="findHotsTagIds" parameterType="int" resultType="com.yaojinsong.ymsblog.dao.pojo.Tag">
+        select tag_id from yjs_article_tag group by tag_id order by count (*) desc limit #{limit}
+    </select>
+
+    <select id="findTagsByTagIds" parameterType="list" resultType="com.yaojinsong.ymsblog.dao.pojo.Tag">
+        select id,avatar,tag_name as tagName from yjs_tag
+        where id in
+        <foreach collection="tagIds" item="tagId" separator="," open="(" close=")">
+            #{tagId}
+        </foreach>
+    </select>
 </mapper>
