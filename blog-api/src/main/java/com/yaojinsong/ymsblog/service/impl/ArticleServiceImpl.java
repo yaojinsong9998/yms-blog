@@ -2,6 +2,7 @@ package com.yaojinsong.ymsblog.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.yaojinsong.ymsblog.dao.dos.Archives;
 import com.yaojinsong.ymsblog.dao.mapper.ArticleMapper;
 import com.yaojinsong.ymsblog.dao.pojo.Article;
 import com.yaojinsong.ymsblog.service.ArticleService;
@@ -70,6 +71,12 @@ public class ArticleServiceImpl implements ArticleService {
         //select id,title from article order by create_date desc limit 5
         List<Article> articles = articleMapper.selectList(queryWrapper);
         return Result.success(copyList(articles,false,false));
+    }
+
+    @Override
+    public Result listArchives() {
+         List<Archives> archivesList = articleMapper.listArchives();
+         return Result.success(archivesList);
     }
 
 
