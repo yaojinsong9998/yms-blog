@@ -13,13 +13,15 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
 
 import java.util.concurrent.TimeUnit;
 
+@Service
 public class LoginServiceImpl implements LoginService {
 
     //加密盐
-    private static final String slat = "yjs!@#";
+    private static final String slat = "mszlu!@#";
 
     @Autowired
     private SysUserService sysUserService;
