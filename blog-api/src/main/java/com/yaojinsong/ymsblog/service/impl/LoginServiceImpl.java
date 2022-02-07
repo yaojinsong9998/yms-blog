@@ -14,12 +14,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class LoginServiceImpl implements LoginService {
 
     //加密盐
-    private static final String slat = "yjs!@#";
+    private static final String slat = "mszlu!@#";
 
     @Autowired
     private SysUserService sysUserService;
@@ -51,5 +52,23 @@ public class LoginServiceImpl implements LoginService {
         String token = JWTUtils.createToken(sysUser.getId());
         redisTemplate.opsForValue().set("TOKEN_" + token, JSON.toJSONString(sysUser),1, TimeUnit.DAYS);
         return Result.success(token);
+    }
+
+    @Override
+    public SysUser chekToken(String token) {
+        if(StringUtils.isBlank(token)){
+            return null;
+        }
+        Map<String, Object> map = JWTUtils.checkToken(token);
+        if(map == null){
+            return null;
+        }
+        String userJson = redisTemplate.opsForValue().get("TOKEN_" + token);
+        if(StringUtils.isBlank(userJson)){
+            return null;
+        }
+        //解析成user对象
+        SysUser sysUser = JSON.parseObject(userJson, SysUser.class);
+        return sysUser;
     }
 }
