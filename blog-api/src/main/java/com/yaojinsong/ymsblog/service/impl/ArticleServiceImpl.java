@@ -91,7 +91,7 @@ public class ArticleServiceImpl implements ArticleService {
          */
         Article article = articleMapper.selectById(articleId);
         ArticleVo articleVo = copy(article, true, true,true,true);
-        return null;
+        return Result.success(articleVo);
     }
 
 
