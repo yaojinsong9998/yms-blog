@@ -9,4 +9,11 @@ public interface LoginService {
     Result login(LoginParam loginParam);
 
     SysUser chekToken(String token);
+
+    /**
+     * 退出登录
+     * @param token
+     * @return
+     */
+    Result logout(String token);
 }
