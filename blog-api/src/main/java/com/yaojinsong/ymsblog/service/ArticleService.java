@@ -16,5 +16,16 @@ public  interface ArticleService {
 
     Result newArticles(int limit);
 
+    /**
+     * 文章归档
+     * @return
+     */
     Result listArchives();
+
+    /**
+     * 查看文章详情
+     * @param articleId
+     * @return
+     */
+    Result findArticleById(Long articleId);
 }
