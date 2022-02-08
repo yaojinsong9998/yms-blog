@@ -54,7 +54,7 @@ public class SysUserServiceImpl implements SysUserService {
          * 2.如果校验失败 返回失败
          * 3.如果成功 返回对应的结果 LoginUserVo
          */
-        SysUser sysUser = loginService.chekToken(token);
+        SysUser sysUser = loginService.checkToken(token);
         if(sysUser == null){
             return Result.fail(ErrorCode.TOKEN_ERROR.getCode(), ErrorCode.TOKEN_ERROR.getMsg());
         }

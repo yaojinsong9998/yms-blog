@@ -57,7 +57,7 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public SysUser chekToken(String token) {
+    public SysUser checkToken(String token) {
         if(StringUtils.isBlank(token)){
             return null;
         }

@@ -8,7 +8,12 @@ public interface LoginService {
 
     Result login(LoginParam loginParam);
 
-    SysUser chekToken(String token);
+    /**
+     * 检查token是否对应user对象
+     * @param token
+     * @return
+     */
+    SysUser checkToken(String token);
 
     /**
      * 退出登录
