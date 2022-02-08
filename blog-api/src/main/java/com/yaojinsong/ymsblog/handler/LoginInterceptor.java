@@ -3,6 +3,7 @@ package com.yaojinsong.ymsblog.handler;
 import com.alibaba.fastjson.JSON;
 import com.yaojinsong.ymsblog.dao.pojo.SysUser;
 import com.yaojinsong.ymsblog.service.LoginService;
+import com.yaojinsong.ymsblog.utils.UserThreadLocal;
 import com.yaojinsong.ymsblog.vo.ErrorCode;
 import com.yaojinsong.ymsblog.vo.Result;
 import lombok.extern.slf4j.Slf4j;
@@ -58,9 +59,14 @@ public class LoginInterceptor implements HandlerInterceptor {
             response.getWriter().print(JSON.toJSONString(result));
             return false;
         }
-
+        //登录验证成功，放行
+        //我希望在controller中 直接获取用户的信息 怎么获取?
+        UserThreadLocal.put(sysUser);
         return true;
     }
-
-
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        //如果不删除 ThreadLocal中用完的信息 会有内存泄漏的风险
+        UserThreadLocal.remove();
+    }
 }
