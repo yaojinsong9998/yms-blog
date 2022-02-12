@@ -4,11 +4,14 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yaojinsong.ymsblog.dao.mapper.CommentMapper;
 import com.yaojinsong.ymsblog.dao.pojo.Comment;
+import com.yaojinsong.ymsblog.dao.pojo.SysUser;
 import com.yaojinsong.ymsblog.service.CommentsService;
 import com.yaojinsong.ymsblog.service.SysUserService;
+import com.yaojinsong.ymsblog.utils.UserThreadLocal;
 import com.yaojinsong.ymsblog.vo.CommentVo;
 import com.yaojinsong.ymsblog.vo.Result;
 import com.yaojinsong.ymsblog.vo.UserVo;
+import com.yaojinsong.ymsblog.vo.params.CommentParam;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,6 +42,27 @@ public class CommentsServiceImpl implements CommentsService {
         List<Comment> comments = commentMapper.selectList(queryWrapper);
         List<CommentVo> commentVoList = copyList(comments);
         return Result.success(commentVoList);
+    }
+
+    @Override
+    public Result comment(CommentParam commentParam) {
+        SysUser sysUser = UserThreadLocal.get();
+        Comment comment = new Comment();
+        comment.setArticleId(commentParam.getArticleId());
+        comment.setAuthorId(sysUser.getId());
+        comment.setContent(commentParam.getContent());
+        comment.setCreateDate(System.currentTimeMillis());
+        Long parent = commentParam.getParent();
+        if (parent == null || parent == 0) {
+            comment.setLevel(1);
+        }else{
+            comment.setLevel(2);
+        }
+        comment.setParentId(parent == null ? 0 : parent);
+        Long toUserId = commentParam.getToUserId();
+        comment.setToUid(toUserId == null ? 0 : toUserId);
+        commentMapper.insert(comment);
+        return Result.success(null);
     }
 
     private List<CommentVo> copyList(List<Comment> comments) {

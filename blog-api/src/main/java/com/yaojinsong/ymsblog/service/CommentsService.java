@@ -1,6 +1,7 @@
 package com.yaojinsong.ymsblog.service;
 
 import com.yaojinsong.ymsblog.vo.Result;
+import com.yaojinsong.ymsblog.vo.params.CommentParam;
 
 public interface CommentsService {
 
@@ -10,4 +11,6 @@ public interface CommentsService {
      * @return
      */
     Result commentsByArticleId(Long id);
+
+    Result comment(CommentParam commentParam);
 }
