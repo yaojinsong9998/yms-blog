@@ -7,10 +7,7 @@ import com.yaojinsong.ymsblog.dao.mapper.ArticleBodyMapper;
 import com.yaojinsong.ymsblog.dao.mapper.ArticleMapper;
 import com.yaojinsong.ymsblog.dao.pojo.Article;
 import com.yaojinsong.ymsblog.dao.pojo.ArticleBody;
-import com.yaojinsong.ymsblog.service.ArticleService;
-import com.yaojinsong.ymsblog.service.CategoryService;
-import com.yaojinsong.ymsblog.service.SysUserService;
-import com.yaojinsong.ymsblog.service.TagService;
+import com.yaojinsong.ymsblog.service.*;
 import com.yaojinsong.ymsblog.vo.ArticleBodyVo;
 import com.yaojinsong.ymsblog.vo.ArticleVo;
 import com.yaojinsong.ymsblog.vo.Result;
@@ -83,6 +80,9 @@ public class ArticleServiceImpl implements ArticleService {
          return Result.success(archivesList);
     }
 
+    @Autowired
+    private ThreadService threadService;
+
     @Override
     public Result findArticleById(Long articleId) {
         /**
@@ -91,8 +91,14 @@ public class ArticleServiceImpl implements ArticleService {
          */
         Article article = articleMapper.selectById(articleId);
         ArticleVo articleVo = copy(article, true, true,true,true);
+        //查看完文章了，新增阅读数，有没有问题呢？
+        //查看完文章之后，本应该直接返回数据了，这时候做了一个更新操作，更新时加写锁，阻塞其他的读操作，性能就会比较低
+        //更新 增加了此次接口的 耗时 如果一旦更新出问题，不能影响 查看文章的操作
+        //线程池  可以把更新操作 扔到线程池中去执行，和主线程就不相关了
+        threadService.updateArticleViewCount(articleMapper,article);
         return Result.success(articleVo);
     }
+
 
 
     /**
