@@ -1,4 +1,4 @@
-package com.mszlu.blog.vo;
+package com.yaojinsong.ymsblog.vo;
 
 import lombok.Data;
 
